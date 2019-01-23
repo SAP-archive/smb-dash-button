@@ -2,7 +2,7 @@
   "name": "b1dash",
   "version": "1.0.0",
   "description": "And AWS IoT dash button implementation with B1",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "node index.js"
   },

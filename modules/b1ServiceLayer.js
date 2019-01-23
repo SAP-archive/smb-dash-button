@@ -5,7 +5,7 @@
 var req = require('request') // HTTP Client
 
 //Load Local configuration file
-const SL_SERVER = process.env.SL_SERVER || "https://<YOUR SL SERVER>:<PORT>/b1s/v1";
+const SL_SERVER = process.env.SL_SERVER || "http://52.28.129.221:50001/b1s/v1";
 
 module.exports = {
     PostMessage: function (callback) {
@@ -26,7 +26,7 @@ function Connect(callback) {
     };
 
     //Set HTTP Request Options
-    options = {
+    var options = {
         uri: uri,
         body: JSON.stringify(data)
     }
@@ -38,9 +38,9 @@ function Connect(callback) {
             body = JSON.parse(body);
             console.log("Connection to SL Successfully \n" + body)
             resp.cookie = response.headers['set-cookie']
-            return callback(null, resp);
+            callback(null, resp);
         } else {
-            return callback(response.statusMessage, response);
+            callback(response.statusMessage, response);
         }
     });
 
@@ -48,15 +48,15 @@ function Connect(callback) {
 
 
 function SLPost(options, endpoint, callback) {
-    options.uri = SLServer + endpoint
+    options.uri = SL_SERVER + endpoint
     console.log("Posting " + endpoint + " to " + options.uri)
     req.post(options, function (error, response, body) {
         if (!error && response.statusCode == 201) {
             body = JSON.parse(body);
             delete body["odata.metadata"];
-            return callback(null, response, body);
+            callback(null, response, body);
         } else {
-            return callback(response.statusMessage, response, null);
+            callback(response.statusMessage, response, null);
         }
     });
 }
@@ -69,8 +69,7 @@ function PostMessage(options, callback) {
             console.error("Can't Connect to Service Layer");
             console.error(error);
         } else {
-            //Connected Successfully, lets send a message
-
+            console.log("Connected Successfully, lets send a message");
             var options = {
                 headers: {
                     'Cookie': resp.cookie

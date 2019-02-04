@@ -5,7 +5,7 @@
 var req = require('request') // HTTP Client
 
 //Load Local configuration file
-const SL_SERVER = process.env.SL_SERVER || "http://52.28.129.221:50001/b1s/v1";
+const SL_SERVER = process.env.SL_SERVER || "http://<YOUR SERVER>:50001/b1s/v1";
 
 module.exports = {
     PostMessage: function (callback) {
@@ -84,7 +84,7 @@ function PostMessage(options, callback) {
                             Text: "This is a message from your dash button"
                         })
             //Make Request
-            SLPost(options, "Messages", function (error, response, bodymess) {
+            SLPost(options, "/Messages", function (error, response, bodymess) {
                 if (error) {
                     console.error("Error Sending SL Message \n" + error );
                 } else {

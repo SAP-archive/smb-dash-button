@@ -32,15 +32,19 @@
 
 'use strict';
 
-const B1SL = require('./modules/b1ServiceLayer');
+const B1SL  = require('./modules/b1ServiceLayer');
+const BYD   = require('./moules/bydOdata')
 
 exports.handler = (event, context, callback) => {
     console.log('Received event:', event);
 
     switch (event.clickType) {
         case 'SINGLE':
-        case 'DOUBLE':
-        default:
             B1SL.PostMessage(callback)
+        case 'DOUBLE':
+            BYD.PostSalesOrder(callback)
+        default:
+            break
+            
     }
 };

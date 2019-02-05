@@ -43,8 +43,6 @@ let Connect = function () {
      **/
 
     return new Promise(function (resolve, reject) {
-
-
         var options  = {
             url: BYD_SERVER + SALES_API,
             method: "HEAD",
@@ -56,8 +54,6 @@ let Connect = function () {
                 Cookie: "",
             }
         }
-    
-    
         req(options, function (error, response, body) {
             if (!error && response.statusCode == 200) {
                 console.log("BYD Reached successfully!")     
@@ -90,18 +86,12 @@ function byDPost(options, endpoint, callback) {
 
 function PostSalesOrder(options, callback) {
 
-    Connect(function (error, resp) {
-        if (error) {
-            console.error("Can't Connect to BYD Server");
-            console.error(error);
-        } else {
-            console.log("Connected Successfully, lets create a Sales Order");
-            var options = {
-                headers: {
-                    'Cookie': resp.cookie
-                }
-            };
-            options.body = {
+    Connect().then(function(response){
+        var options = {
+            headers: {
+                'Cookie': resp.cookie
+            },
+            body: {
                 url: getByDserver() + model_sales,
                 method: "POST",
                 headers: [],
@@ -125,16 +115,18 @@ function PostSalesOrder(options, callback) {
                             ]
                         }
                     ]
-                }
-        }
-            //Make Request
-            byDPost(options, SALES_API, function (error, response) {
-                if (error) {
-                    console.error("Error Creating Sales Order Message \n" + error );
-                } else {
-                    console.log("Sales Order created successfully!")
-                }
-            })
-        }
-    });
+                }   
+            }
+        };
+
+        byDPost(options, SALES_API, function (error, response) {
+            if (error) {
+                console.error("Error Creating Sales Order Message \n" + error );
+            } else {
+                console.log("Sales Order created successfully!")
+            }
+        })
+    }).catch(function(error, response){
+
+    })
 }

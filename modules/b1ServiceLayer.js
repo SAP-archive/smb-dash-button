@@ -1,6 +1,17 @@
 /* Service Layer module to interact with B1 Data */
 /* Server Configuration and User Credentials set in environment variables */
 
+/** Environment Variables Required: 
+ *  SL_SERVER ->http://12.12.12.21:50001/b1s/v1
+ * 
+ * Optional Environment variables which have default values:
+ * B1_USER: -> manager
+ * B1_PASS -> 1234
+ * B1_COMP -> SBODEMOUS
+ * 
+ * */
+
+
 //Load Node Modules
 var req = require('request') // HTTP Client
 

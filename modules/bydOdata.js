@@ -11,19 +11,20 @@
  * BYD_DEFAULT_BP -> A Business Partner Code for the ByD Sales Order -> CP100110
  * BYD_ITEM -> Item code for the Sales Order ->  P100401
  * 
- * */ 
+ * */
 
 
 
 //Load Node Modules
 var req = require('request') // HTTP Client
+var moment = require('moment')
 
 //Load Local configuration file
-const BYD_SERVER = (process.env.BYD_SERVER  || 'https://<YOUR BYD TENANT>.sapbydesign.com') 
-                 + (process.env.BYD_PATH    || '/sap/byd/odata/cust/v1')
+const BYD_SERVER = (process.env.BYD_SERVER || 'https://<YOUR BYD TENANT>.sapbydesign.com') +
+    (process.env.BYD_PATH || '/sap/byd/odata/cust/v1')
 
-const SALES_API = process.env.BYD_SALESAPI  || '/khsalesorderdemo/SalesOrderCollection'
-const BYD_AUTH  = process.env.BYD_AUTH  || '<ENCODED 64   user:password>'
+const SALES_API = process.env.BYD_SALESAPI || '/khsalesorderdemo/SalesOrderCollection'
+const BYD_AUTH = process.env.BYD_AUTH || '<ENCODED 64   user:password>'
 
 
 
@@ -43,9 +44,9 @@ let Connect = function () {
      **/
 
     return new Promise(function (resolve, reject) {
-        var options  = {
+        var options = {
             url: BYD_SERVER + SALES_API,
-            method: "HEAD",
+            method: "GET",
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
@@ -56,10 +57,10 @@ let Connect = function () {
         }
         req(options, function (error, response, body) {
             if (!error && response.statusCode == 200) {
-                console.log("BYD Reached successfully!")     
-                    resolve(response);
+                console.log("BYD Reached successfully!")
+                resolve(response);
             } else {
-                console.error("Error reaching ByD. \n" + response.statusCode + " - " + error)
+                console.error("Error reaching ByD." + response.statusCode + " - " + error)
                 reject(error, response);
             }
         });
@@ -69,64 +70,50 @@ let Connect = function () {
 }
 
 
-function byDPost(options, endpoint, callback) {
-    options.uri = BYD_SERVER + endpoint
-    console.log("Posting " + endpoint + " to " + options.uri)
-    req.post(options, function (error, response, body) {
-        if (!error && response.statusCode == 201) {
-            body = JSON.parse(body);
-            delete body["odata.metadata"];
-            callback(null, response, body);
-        } else {
-            callback(response.statusMessage, response, null);
-        }
-    });
-}
-
 
 function PostSalesOrder(options, callback) {
 
-    Connect().then(function(response){
-        var options = {
-            headers: {
-                'Cookie': resp.cookie
+    Connect().then(function (response) {
+        console.log("Time to create the Sales Order")
+        var body = {
+            ExternalReference: "From Dash Button",
+            DataOriginTypeCode: "1",
+            Name: "Order created via DASH Button @ " + moment().format(),
+            SalesOrderBuyerParty: {
+                PartyID: process.env.BYD_DEFAULT_BP || 'CP100110'
             },
-            body: {
-                url: getByDserver() + model_sales,
-                method: "POST",
-                headers: [],
-                body: {
-                    ExternalReference: "From Dash Button",
-                    DataOriginTypeCode: "1",
-                    Name: "Order created via SMB Mkt Place @" + moment.now(),
-                    SalesOrderBuyerParty: {
-                        PartyID: process.env.BYD_DEFAULT_BP || 'CP100110'
-                    },
-                    SalesOrderItem: [
-                        {
-                            ID: "10",
-                            SalesOrderItemProduct: {
-                                ProductID: process.env.BYD_ITEM || 'P100401'
-                            },
-                            SalesOrderItemScheduleLine: [
-                                {
-                                    Quantity: "1"
-                                }
-                            ]
-                        }
-                    ]
-                }   
-            }
+            SalesOrderItem: [{
+                ID: "10",
+                SalesOrderItemProduct: {
+                    ProductID: process.env.BYD_ITEM || 'P100401'
+                },
+                SalesOrderItemScheduleLine: [{
+                    Quantity: "1"
+                }]
+            }]
+        }
+        var options = {
+            url: BYD_SERVER + SALES_API,
+            method: "POST",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+                "x-csrf-token": response.headers["x-csrf-token"], //Damm Token
+                "cookie": response.headers["set-cookie"]
+            },
+            body: JSON.stringify(body)
         };
 
-        byDPost(options, SALES_API, function (error, response) {
+
+        req(options, function (error, response) {
             if (error) {
-                console.error("Error Creating Sales Order Message \n" + error );
+                console.error("Error Creating Sales Order Message \n" + error);
             } else {
                 console.log("Sales Order created successfully!")
             }
         })
-    }).catch(function(error, response){
+    }).catch(function (error, response) {
+        console.error("Catch error " + error)
 
     })
 }

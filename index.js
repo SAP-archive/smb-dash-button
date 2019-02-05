@@ -1,20 +1,5 @@
 /**
- * This is a sample Lambda function that sends an email on click of a
- * button. It requires these SES permissions.
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ses:GetIdentityVerificationAttributes",
-                "ses:SendEmail",
-                "ses:VerifyEmailIdentity"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
+ * This is a sample Lambda function that Send messages to B1 and Creates Sales order on BYD
  *
  * The following JSON template shows what is sent as the payload:
 {

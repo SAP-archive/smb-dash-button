@@ -33,7 +33,7 @@
 'use strict';
 
 const B1SL  = require('./modules/b1ServiceLayer');
-const BYD   = require('./moules/bydOdata')
+const BYD   = require('./modules/bydOdata')
 
 exports.handler = (event, context, callback) => {
     console.log('Received event:', event);

@@ -26,8 +26,10 @@ exports.handler = (event, context, callback) => {
     switch (event.clickType) {
         case 'SINGLE':
             B1SL.PostMessage(callback)
+            break;
         case 'DOUBLE':
             BYD.PostSalesOrder(callback)
+            break;
         default:
             break
             

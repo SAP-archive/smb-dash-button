@@ -27,7 +27,7 @@ exports.handler = (event, context, callback) => {
         case 'SINGLE':
             B1SL.PostMessage(callback)
             break;
-        case 'DOUBLE':
+        case 'LONG':
             BYD.PostSalesOrder(callback)
             break;
         default:

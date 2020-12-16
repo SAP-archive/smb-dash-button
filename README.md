@@ -1,4 +1,6 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/smb-dash-button)](https://api.reuse.software/info/github.com/SAP-samples/smb-dash-button)
 [![License: Apache2](https://img.shields.io/badge/License-Apache2-green.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # smb-dash-button
 [![SAP](https://i.imgur.com/0PLCJPD.png)](http://cloudplatform.sap.com/)
 
@@ -18,7 +20,7 @@ A detailed tutorial is avaible [in this blog post](https://blogs.sap.com/2019/02
 ## Deployment
 1 - Follow the steps in [in this blog post](https://blogs.sap.com/2019/02/06/iot-made-simple-with-sap-business-one-and-sap-business-bydesign/) to ha ve your IoT button registered on your AWS account
 
-2 - Download the latest release of this sample
+2 - Download the [latest release of this sample](https://github.com/SAP-samples/smb-dash-button/releases/latest)
 
 3 - Upload to your AWS Lambda function (created during the registration)
 
